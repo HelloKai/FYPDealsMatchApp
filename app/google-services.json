@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "461288206756",
+    "firebase_url": "https://fypdealsmatchapp.firebaseio.com",
+    "project_id": "fypdealsmatchapp",
+    "storage_bucket": "fypdealsmatchapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461288206756:android:f4e919fc2ce25ec5",
+        "android_client_info": {
+          "package_name": "com.kaiann.fypdealsmatchapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "461288206756-reuam35abtqn0oao8mhinmd5r1fnlnb3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kaiann.fypdealsmatchapp",
+            "certificate_hash": "ea75a97a125aa00a31f49aaae4161d17802bc694"
+          }
+        },
+        {
+          "client_id": "461288206756-00ct9o758dpjbq6llopo0pn1goa87rqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQeHoPutj5i2-shXpqGEa9gbhWr-yvYsQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "461288206756-00ct9o758dpjbq6llopo0pn1goa87rqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
