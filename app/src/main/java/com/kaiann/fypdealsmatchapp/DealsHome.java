@@ -45,7 +45,6 @@ public class DealsHome extends AppCompatActivity
     RecyclerView recyler_menu;
     RecyclerView.LayoutManager layoutManager;
 
-    //changed from Category to Item!!!!!!!
 
     FirebaseRecyclerAdapter<Item, MenuViewHolder> adapter;
 
@@ -64,7 +63,6 @@ public class DealsHome extends AppCompatActivity
         //Init Firebase
         database = FirebaseDatabase.getInstance();
 
-        //!!changes here too
         category = database.getReference("Item");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -123,35 +121,6 @@ public class DealsHome extends AppCompatActivity
             }
         };
 
-        //!!!!!CHANGES ABOVE MADE FROM CATEGORY MODEL TO ITEM MODEL
-
-//        adapter = new FirebaseRecyclerAdapter<Category, MenuViewHolder>
-//                (Category.class, R.layout.menu_item, MenuViewHolder.class, category) {
-//            @Override
-//            protected void populateViewHolder(MenuViewHolder viewHolder, Category model, int position) {
-//                viewHolder.txtMenuName.setText(model.getName());
-//                Picasso.get().load(model.getImage()).into(viewHolder.imageView);
-//
-//                final Category clickItem = model;
-//                viewHolder.setItemClickListener(new ItemClickListener() {
-//                    @Override
-//                    public void onClick(View view, int position, boolean isLongClick) {
-////                        Toast.makeText(DealsHome.this, ""+clickItem.getName(),Toast.LENGTH_SHORT).show();
-//
-////                        // Move to next page (item details page)
-//                        Intent itemDetail = new Intent(DealsHome.this, DealItem.class);
-//                        itemDetail.putExtra("ItemId", adapter.getRef(position).getKey()); //send item id to new activity
-//                        startActivity(itemDetail);
-//
-////                        Intent itemList = new Intent(DealsHome.this, ItemList.class);
-////                        itemList.putExtra("CategoryId", adapter.getRef(position).getKey());
-////                        startActivity(itemList);
-//
-//
-//                    }
-//                });
-//            }
-//        };
         recyler_menu.setAdapter(adapter);
 
     }
@@ -196,7 +165,10 @@ public class DealsHome extends AppCompatActivity
 
         if (id == R.id.nav_menu) {
             // Handle the menu action
+            loadMenu();
         } else if (id == R.id.nav_orders) {
+
+        } else if (id == R.id.nav_location) {
 
         } else if (id == R.id.nav_log_out) {
             item.setChecked(true);
