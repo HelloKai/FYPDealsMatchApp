@@ -16,7 +16,10 @@ public class DealViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     private ItemClickListener itemClickListener;
 
+    public void setItemClickListener(ItemClickListener itemClickListener){
+        this.itemClickListener = itemClickListener;
 
+    }
 
     public DealViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -27,10 +30,6 @@ public class DealViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         itemView.setOnClickListener(this);
     }
 
-    public void setItemClickListener(ItemClickListener itemClickListener){
-        this.itemClickListener = itemClickListener;
-
-    }
 
     @Override
     public void onClick(View view) {

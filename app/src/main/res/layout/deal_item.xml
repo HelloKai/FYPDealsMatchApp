@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/deal_name"
-            android:text="Deal Name"
+            android:text="Name of Deal"
             android:textColor="@android:color/white"
             android:background="#66000000"
             android:textSize="20sp"
