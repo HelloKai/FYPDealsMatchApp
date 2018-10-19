@@ -47,7 +47,8 @@
 
         <activity
             android:name=".DealsMapsActivity"
-            android:label="@string/title_activity_deals_maps"></activity>
+            android:label="@string/title_activity_deals_maps" />
+        <activity android:name=".SignUpActivity"></activity>
     </application>
 
 </manifest>

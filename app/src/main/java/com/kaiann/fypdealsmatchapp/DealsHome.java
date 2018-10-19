@@ -58,6 +58,7 @@ public class DealsHome extends AppCompatActivity
     private DrawerLayout mDrawerLayout;
     FirebaseDatabase database;
     DatabaseReference category;
+
     FirebaseStorage storage;
     StorageReference storageReference;
 
@@ -70,7 +71,7 @@ public class DealsHome extends AppCompatActivity
     MaterialEditText edtName;
     FButton btnUpload, btnSelect;
 
-    Item newItem;
+    Category newCategory;
 
     Uri saveUri;
     private final int PICK_IMAGE_REQUEST = 71;
@@ -134,20 +135,20 @@ public class DealsHome extends AppCompatActivity
         btnSelect = add_menu_layout.findViewById(R.id.btnSelect);
         btnUpload = add_menu_layout.findViewById(R.id.btnUpload);
 
-//        btnSelect.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                chooseImage();
-//            }
-//        });
-//
-//        btnUpload.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                uploadImage();
-//
-//            }
-//        });
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseImage();
+            }
+        });
+
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadImage();
+
+            }
+        });
 
         alertDialog.setView(add_menu_layout);
         alertDialog.setIcon(R.drawable.ic_face_orange_24dp);
@@ -157,6 +158,9 @@ public class DealsHome extends AppCompatActivity
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 dialogInterface.dismiss();
+                if(newCategory != null){
+                    category.push().setValue(newCategory);
+                }
 
 
             }
@@ -172,63 +176,63 @@ public class DealsHome extends AppCompatActivity
         alertDialog.show();
     }
 
-//    private void uploadImage() {
-//        if(saveUri != null){
-//            final ProgressDialog mDialog = new ProgressDialog(this);
-//            mDialog.setMessage("Uploading...");
-//            mDialog.show();
-//
-//            String imageName = UUID.randomUUID().toString();
-//            final StorageReference imageFolder = storageReference.child("images/"+imageName);
-//            imageFolder.putFile(saveUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    mDialog.dismiss();
-//                    Toast.makeText(DealsHome.this, "Uploaded!", Toast.LENGTH_SHORT).show();
-//                    imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                        @Override
-//                        public void onSuccess(Uri uri) {
-//                            newItem = new Item(edtName.getText().toString(), uri.toString());
-//
-//                        }
-//                    });
-//                }
-//            })
-//            .addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    mDialog.dismiss();
-//                    Toast.makeText(DealsHome.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                            double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-//                            mDialog.setMessage(progress+"% Uploaded");
-//
-//                        }
-//                    });
-//        }
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-//                && data !=null && data.getData() != null){
-//            saveUri = data.getData();
-//            btnSelect.setText("Image Selected!");
-//        }
-//    }
-//
-//    private void chooseImage() {
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-//
-//    }
+    private void uploadImage() {
+        if(saveUri != null){
+            final ProgressDialog mDialog = new ProgressDialog(this);
+            mDialog.setMessage("Uploading...");
+            mDialog.show();
+
+            String imageName = UUID.randomUUID().toString();
+            final StorageReference imageFolder = storageReference.child("images/"+imageName);
+            imageFolder.putFile(saveUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    mDialog.dismiss();
+                    Toast.makeText(DealsHome.this, "Uploaded!", Toast.LENGTH_SHORT).show();
+                    imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            newCategory = new Category(edtName.getText().toString(), uri.toString());
+
+                        }
+                    });
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    mDialog.dismiss();
+                    Toast.makeText(DealsHome.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                            mDialog.setMessage(progress+"% Uploaded");
+
+                        }
+                    });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data !=null && data.getData() != null){
+            saveUri = data.getData();
+            btnSelect.setText("Image Selected!");
+        }
+    }
+
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+    }
 
     //DOUBLE CHECK
 
@@ -247,13 +251,11 @@ public class DealsHome extends AppCompatActivity
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
 //                        Toast.makeText(DealsHome.this, ""+clickItem.getName(),Toast.LENGTH_SHORT).show();
-//                        Intent itemDetail = new Intent(DealsHome.this, DealItem.class);
-//                        itemDetail.putExtra("ItemId", adapter.getRef(position).getKey()); //send item id to new activity
-//                        startActivity(itemDetail);
-
                         Intent itemList = new Intent(DealsHome.this, ItemList.class);
                         itemList.putExtra("CategoryId", adapter.getRef(position).getKey());
                         startActivity(itemList);
+
+                        //add code later???
 
                     }
                 });
