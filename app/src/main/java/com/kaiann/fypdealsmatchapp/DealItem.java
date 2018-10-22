@@ -5,15 +5,19 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kaiann.fypdealsmatchapp.Model.Item;
+import com.kaiann.fypdealsmatchapp.Model.Request;
 import com.squareup.picasso.Picasso;
 
 public class DealItem extends AppCompatActivity {
@@ -29,6 +33,7 @@ public class DealItem extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference item;
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,7 @@ public class DealItem extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         item = database.getReference("Item");
+        auth = FirebaseAuth.getInstance();
 
         btnCart = findViewById(R.id.btnCart);
 
@@ -56,6 +62,81 @@ public class DealItem extends AppCompatActivity {
         if(!itemId.isEmpty()){
             getDetailItem(itemId);
         }
+
+        btnCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final DatabaseReference reqRef = database.getReference("Request").child(itemId);
+
+                reqRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        final String user = auth.getCurrentUser().getUid();
+                        DatabaseReference userRef = database.getReference("Users").child(user);
+
+                        if(!dataSnapshot.hasChildren()){
+                            //else add current user into request db
+
+                            userRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                    String name, phone;
+                                    name = dataSnapshot.child("name").getValue(String.class);
+                                    phone = dataSnapshot.child("phone").getValue(String.class);
+
+                                    //create new request
+                                    Request newRequest = new Request();
+                                    newRequest.setUid(user);
+                                    newRequest.setName(name);
+                                    newRequest.setPhone(phone);
+
+                                    //save to request db
+                                    database.getReference("Request").child(itemId).setValue(newRequest);
+
+                                    Toast.makeText(DealItem.this, "REQUEST MADE!", Toast.LENGTH_SHORT).show();
+
+                                    //ADD ORDER CARD PENDING REQUEST CODE BELOW
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+
+                        }else{
+                            //if 1 user exists, get user name and phone
+
+                            String name, phone, uidcheck;
+                            name = dataSnapshot.child("name").getValue(String.class);
+                            phone = dataSnapshot.child("phone").getValue(String.class);
+                            uidcheck = dataSnapshot.child("uid").getValue(String.class);
+
+                            //only display text if current uid and uid in db is different
+                            if(!uidcheck.equals(user)){
+                                //match found please check your order cart!
+                                //ADD ORDER CART UPDATE MATCH FOUND CODE
+                            Toast.makeText(DealItem.this, "Match found: "+name +", "+phone, Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+            }
+        });
     }
 
     private void getDetailItem(String itemId) {

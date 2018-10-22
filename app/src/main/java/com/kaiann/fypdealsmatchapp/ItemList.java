@@ -4,10 +4,12 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,8 +24,12 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -31,6 +37,8 @@ import com.google.firebase.storage.UploadTask;
 import com.kaiann.fypdealsmatchapp.Interface.ItemClickListener;
 import com.kaiann.fypdealsmatchapp.Model.Category;
 import com.kaiann.fypdealsmatchapp.Model.Item;
+import com.kaiann.fypdealsmatchapp.Model.Request;
+import com.kaiann.fypdealsmatchapp.Model.User;
 import com.kaiann.fypdealsmatchapp.ViewHolder.DealViewHolder;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
@@ -47,6 +55,7 @@ public class ItemList extends AppCompatActivity {
     RelativeLayout rootLayout;
     FloatingActionButton fab;
 
+    FirebaseAuth auth;
     FirebaseDatabase database;
     DatabaseReference itemList;
 
@@ -77,6 +86,7 @@ public class ItemList extends AppCompatActivity {
         itemList = database.getReference("Item");
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        auth = FirebaseAuth.getInstance();
 
         recycler_item = findViewById(R.id.recycler_item);
         recycler_item.setHasFixedSize(true);
@@ -142,8 +152,10 @@ public class ItemList extends AppCompatActivity {
 
                 dialogInterface.dismiss();
                 if(newItem != null){
-                    itemList.push().setValue(newItem);
-                    Snackbar.make(rootLayout, "New Deal: "+newItem.getName()+" has been successfully added!",Snackbar.LENGTH_LONG)
+                    final String key = itemList.push().getKey();
+                    itemList.child(key).setValue(newItem);
+                    addRequest(key);
+                    Snackbar.make(rootLayout, "New Deal: "+newItem.getName()+" has been successfully added!" + key,Snackbar.LENGTH_LONG)
                             .show();
                 }
 
@@ -159,6 +171,42 @@ public class ItemList extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    private void addRequest(String key) {
+        //key value is passed through function
+        //get datasnapshot of current user name & phone
+        final String user = auth.getCurrentUser().getUid();
+        final String itemKey = key;
+
+        DatabaseReference userRef = database.getReference("Users").child(user);
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String name, phone;
+                name = dataSnapshot.child("name").getValue(String.class);
+                phone = dataSnapshot.child("phone").getValue(String.class);
+
+                //create new request
+                Request newRequest = new Request();
+                newRequest.setUid(user);
+                newRequest.setName(name);
+                newRequest.setPhone(phone);
+
+                //save to request db
+                database.getReference("Request").child(itemKey).setValue(newRequest);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     @Override

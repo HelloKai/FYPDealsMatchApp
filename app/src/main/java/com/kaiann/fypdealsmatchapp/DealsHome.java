@@ -255,7 +255,6 @@ public class DealsHome extends AppCompatActivity
                         itemList.putExtra("CategoryId", adapter.getRef(position).getKey());
                         startActivity(itemList);
 
-                        //add code later???
 
                     }
                 });
