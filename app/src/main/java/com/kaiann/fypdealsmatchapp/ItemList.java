@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,7 @@ public class ItemList extends AppCompatActivity {
 
     MaterialEditText edtName, edtDescription, edtLocation;
     FButton btnSelect, btnUpload;
+    Toolbar mItemToolbar;
 
     Item newItem;
 
@@ -92,6 +94,12 @@ public class ItemList extends AppCompatActivity {
         recycler_item.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recycler_item.setLayoutManager(layoutManager);
+
+        mItemToolbar = findViewById(R.id.item_app_bar);
+        setSupportActionBar(mItemToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Deals Available");
+        mItemToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
 
         rootLayout = findViewById(R.id.rootLayout);
 
@@ -146,7 +154,7 @@ public class ItemList extends AppCompatActivity {
         alertDialog.setView(add_menu_layout);
         alertDialog.setIcon(R.drawable.ic_face_orange_24dp);
 
-        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("Submit Deal", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -162,7 +170,7 @@ public class ItemList extends AppCompatActivity {
 
             }
         });
-        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -273,7 +281,8 @@ public class ItemList extends AppCompatActivity {
 
     private void loadListItem(String categoryId) {
             adapter = new FirebaseRecyclerAdapter<Item, DealViewHolder>
-                    (Item.class, R.layout.deal_item, DealViewHolder.class, itemList.orderByChild("menuId").equalTo(categoryId)) {
+                    (Item.class, R.layout.deal_item, DealViewHolder.class,
+                            itemList.orderByChild("menuId").equalTo(categoryId)) {
                 @Override
                 protected void populateViewHolder(DealViewHolder viewHolder, Item model, int position) {
                     viewHolder.deal_name.setText(model.getName());

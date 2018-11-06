@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kaiann.fypdealsmatchapp.Model.Complete;
 import com.kaiann.fypdealsmatchapp.Model.Item;
+import com.kaiann.fypdealsmatchapp.Model.Partner;
 import com.kaiann.fypdealsmatchapp.Model.Request;
 import com.squareup.picasso.Picasso;
 
@@ -76,6 +77,7 @@ public class DealItem extends AppCompatActivity {
 
                         final String user = auth.getCurrentUser().getUid();
                         DatabaseReference userRef = database.getReference("Users").child(user);
+                        final String pushKey = database.getReference("Complete").push().getKey();
 
                         if(!dataSnapshot.hasChildren()){
                             //else add current user into request db
@@ -99,7 +101,6 @@ public class DealItem extends AppCompatActivity {
 
                                     Toast.makeText(DealItem.this, "REQUEST MADE!", Toast.LENGTH_SHORT).show();
 
-                                    //ADD ORDER CARD PENDING REQUEST CODE BELOW
 
                                 }
 
@@ -113,10 +114,10 @@ public class DealItem extends AppCompatActivity {
 
                             return;
 
-                        }else{
+                        }else {
                             //if 1 user exists, get user name and phone
 
-                            String name1, phone1, uidcheck;
+                            final String name1, phone1, uidcheck;
                             name1 = dataSnapshot.child("name").getValue(String.class);
                             phone1 = dataSnapshot.child("phone").getValue(String.class);
                             uidcheck = dataSnapshot.child("uid").getValue(String.class);
@@ -132,8 +133,10 @@ public class DealItem extends AppCompatActivity {
                                 Complete newComplete1 = new Complete();
                                 newComplete1.setName(name1);
                                 newComplete1.setPhone(phone1);
+                                newComplete1.setPartner(pushKey);
 
-                                database.getReference("Complete").child(itemId).child(uidcheck).setValue(newComplete1);
+                                database.getReference("Complete").child(uidcheck).child(itemId).setValue(newComplete1);
+
 
                                 //add current user under same Completed itemId db
 
@@ -148,10 +151,18 @@ public class DealItem extends AppCompatActivity {
                                         Complete newComplete2 = new Complete();
                                         newComplete2.setName(name);
                                         newComplete2.setPhone(phone);
+                                        newComplete2.setPartner(pushKey);
 
-                                        DatabaseReference existing = database.getReference("Complete").child(itemId);
+                                        DatabaseReference existing = database.getReference("Complete");
 
-                                        existing.child(user).setValue(newComplete2);
+                                        existing.child(user).child(itemId).setValue(newComplete2);
+
+                                        Partner newPartner = new Partner();
+                                        newPartner.setUser1(user);
+                                        newPartner.setUser2(uidcheck);
+                                        newPartner.setItemId(itemId);
+                                        DatabaseReference partner = database.getReference("Partner");
+                                        partner.child(pushKey).setValue(newPartner);
 
                                     }
 
@@ -159,9 +170,8 @@ public class DealItem extends AppCompatActivity {
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                     }
-                                });
 
-                                //ADD ORDER CART UPDATE MATCH FOUND CODE BELOW
+                                });
 
 
                                 //remove matched customer from Request db
@@ -170,8 +180,9 @@ public class DealItem extends AppCompatActivity {
                                     return;
                                 }
 
-
                                 return;
+
+                                //ADD intent to DealComplete activity
 
                             }
 

@@ -57,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
                 final String email = mEmail.getText().toString().trim();
                 final String password = mPassword.getText().toString().trim();
 
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this,
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener
+                        (MainActivity.this,
                         new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Login Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Login Error",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

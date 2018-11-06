@@ -94,13 +94,13 @@ public class DealsHome extends AppCompatActivity
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showDialog();
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -123,97 +123,97 @@ public class DealsHome extends AppCompatActivity
 
     }
 
-    private void showDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DealsHome.this);
-        alertDialog.setTitle("Add new deal!");
-        alertDialog.setMessage("Please fill in all the information");
+//    private void showDialog() {
+//        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DealsHome.this);
+//        alertDialog.setTitle("Add new deal!");
+//        alertDialog.setMessage("Please fill in all the information");
+//
+//        LayoutInflater inflater = this.getLayoutInflater();
+//        View add_menu_layout = inflater.inflate(R.layout.add_new_item_layout, null);
+//
+//        edtName = add_menu_layout.findViewById(R.id.edtName);
+//        btnSelect = add_menu_layout.findViewById(R.id.btnSelect);
+//        btnUpload = add_menu_layout.findViewById(R.id.btnUpload);
+//
+//        btnSelect.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                chooseImage();
+//            }
+//        });
+//
+//        btnUpload.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                uploadImage();
+//
+//            }
+//        });
+//
+//        alertDialog.setView(add_menu_layout);
+//        alertDialog.setIcon(R.drawable.ic_face_orange_24dp);
+//
+//        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                dialogInterface.dismiss();
+//                if(newCategory != null){
+//                    category.push().setValue(newCategory);
+//                }
+//
+//
+//            }
+//        });
+//        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                dialogInterface.dismiss();
+//
+//            }
+//        });
+//        alertDialog.show();
+//    }
 
-        LayoutInflater inflater = this.getLayoutInflater();
-        View add_menu_layout = inflater.inflate(R.layout.add_new_item_layout, null);
-
-        edtName = add_menu_layout.findViewById(R.id.edtName);
-        btnSelect = add_menu_layout.findViewById(R.id.btnSelect);
-        btnUpload = add_menu_layout.findViewById(R.id.btnUpload);
-
-        btnSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chooseImage();
-            }
-        });
-
-        btnUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uploadImage();
-
-            }
-        });
-
-        alertDialog.setView(add_menu_layout);
-        alertDialog.setIcon(R.drawable.ic_face_orange_24dp);
-
-        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                dialogInterface.dismiss();
-                if(newCategory != null){
-                    category.push().setValue(newCategory);
-                }
-
-
-            }
-        });
-        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                dialogInterface.dismiss();
-
-            }
-        });
-        alertDialog.show();
-    }
-
-    private void uploadImage() {
-        if(saveUri != null){
-            final ProgressDialog mDialog = new ProgressDialog(this);
-            mDialog.setMessage("Uploading...");
-            mDialog.show();
-
-            String imageName = UUID.randomUUID().toString();
-            final StorageReference imageFolder = storageReference.child("images/"+imageName);
-            imageFolder.putFile(saveUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    mDialog.dismiss();
-                    Toast.makeText(DealsHome.this, "Uploaded!", Toast.LENGTH_SHORT).show();
-                    imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            newCategory = new Category(edtName.getText().toString(), uri.toString());
-
-                        }
-                    });
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    mDialog.dismiss();
-                    Toast.makeText(DealsHome.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-                            mDialog.setMessage(progress+"% Uploaded");
-
-                        }
-                    });
-        }
-    }
+//    private void uploadImage() {
+//        if(saveUri != null){
+//            final ProgressDialog mDialog = new ProgressDialog(this);
+//            mDialog.setMessage("Uploading...");
+//            mDialog.show();
+//
+//            String imageName = UUID.randomUUID().toString();
+//            final StorageReference imageFolder = storageReference.child("images/"+imageName);
+//            imageFolder.putFile(saveUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    mDialog.dismiss();
+//                    Toast.makeText(DealsHome.this, "Uploaded!", Toast.LENGTH_SHORT).show();
+//                    imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                        @Override
+//                        public void onSuccess(Uri uri) {
+//                            newCategory = new Category(edtName.getText().toString(), uri.toString());
+//
+//                        }
+//                    });
+//                }
+//            })
+//            .addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    mDialog.dismiss();
+//                    Toast.makeText(DealsHome.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+//                            mDialog.setMessage(progress+"% Uploaded");
+//
+//                        }
+//                    });
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -226,13 +226,13 @@ public class DealsHome extends AppCompatActivity
         }
     }
 
-    private void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-
-    }
+//    private void chooseImage() {
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+//
+//    }
 
     //DOUBLE CHECK
 
@@ -266,15 +266,15 @@ public class DealsHome extends AppCompatActivity
 
     }
 
-    private void loadLocation(){
-        Toast.makeText(DealsHome.this, "click check",Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(DealsHome.this, DealsMapsActivity.class);
-        startActivity(intent);
-        finish();
-        return;
-
-    }
+//    private void loadLocation(){
+//        Toast.makeText(DealsHome.this, "click check",Toast.LENGTH_SHORT).show();
+//
+//        Intent intent = new Intent(DealsHome.this, DealsMapsActivity.class);
+//        startActivity(intent);
+//        finish();
+//        return;
+//
+//    }
 
     @Override
     public void onBackPressed() {
@@ -319,10 +319,20 @@ public class DealsHome extends AppCompatActivity
             loadMenu();
         } else if (id == R.id.nav_orders) {
 
-        } else if (id == R.id.nav_location) {
-            loadLocation();
+            Intent orders = new Intent(DealsHome.this, DealStatus.class);
+            startActivity(orders);
 
-        } else if (id == R.id.nav_log_out) {
+        } else if (id == R.id.nav_complete){
+
+            Intent complete = new Intent(DealsHome.this, DealComplete.class);
+            startActivity(complete);
+
+        }
+//        else if (id == R.id.nav_location) {
+//            loadLocation();
+//
+//        }
+        else if (id == R.id.nav_log_out) {
             item.setChecked(true);
             mDrawerLayout.closeDrawers();
 

@@ -14,43 +14,45 @@
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtName"
-            android:hint="Name"
+            android:hint="Name of Deal"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:textColorHint="@color/colorPrimary"
             android:text=""
             android:textColor="@color/colorPrimary"
-            android:textSize="34sp"
+            android:textSize="15dp"
             android:inputType="text"
             app:met_baseColor="@color/colorPrimary"
             app:met_floatingLabel="highlight"
             app:met_primaryColor="@color/colorPrimary"
             app:met_singleLineEllipsis="true"
             />
+
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtLocation"
-            android:hint="Location"
+            android:hint="Location: Name of shop, Address of location"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:textColorHint="@color/colorPrimary"
             android:text=""
             android:textColor="@color/colorPrimary"
-            android:textSize="34sp"
+            android:textSize="15dp"
             android:inputType="text"
             app:met_baseColor="@color/colorPrimary"
             app:met_floatingLabel="highlight"
             app:met_primaryColor="@color/colorPrimary"
             app:met_singleLineEllipsis="true"
             />
+
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtDescription"
-            android:hint="Description"
+            android:hint="Description: Price and other details go here"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:textColorHint="@color/colorPrimary"
             android:text=""
             android:textColor="@color/colorPrimary"
-            android:textSize="24sp"
+            android:textSize="15dp"
             android:inputType="textMultiLine"
             app:met_baseColor="@color/colorPrimary"
             app:met_floatingLabel="highlight"
@@ -68,7 +70,7 @@
 
             <info.hoang8f.widget.FButton
                 android:id="@+id/btnSelect"
-                android:text="Select"
+                android:text="Select Image"
                 android:textColor="@android:color/white"
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="8dp"
@@ -76,8 +78,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                app:buttonColor="@color/colorPrimary"
-                app:shadowColor="@android:color/black"
+                app:buttonColor="@color/fbutton_color_carrot"
+                app:shadowColor="@android:color/darker_gray"
                 app:shadowEnabled="true"
                 app:shadowHeight="5dp"
                 app:cornerRadius="4dp"/>
@@ -92,8 +94,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                app:buttonColor="@color/colorPrimary"
-                app:shadowColor="@android:color/black"
+                app:buttonColor="@color/fbutton_color_carrot"
+                app:shadowColor="@android:color/darker_gray"
                 app:shadowEnabled="true"
                 app:shadowHeight="5dp"
                 app:cornerRadius="4dp" />

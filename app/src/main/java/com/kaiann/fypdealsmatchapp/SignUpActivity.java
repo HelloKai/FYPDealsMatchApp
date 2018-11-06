@@ -20,7 +20,7 @@ import com.kaiann.fypdealsmatchapp.Model.User;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    private EditText displayname, phonenumber, mEmail, mPassword;
+    private EditText displayname, phonenumber, mEmail, mPassword, cPassword;
     private Button signUp;
 
     private FirebaseAuth mAuth;
@@ -36,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
         mEmail = findViewById(R.id.email);
         mPassword = findViewById(R.id.password);
         signUp = findViewById(R.id.signUp);
+        cPassword = findViewById(R.id.confirmpassword);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -52,39 +53,50 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         };
-
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                         final String name = displayname.getText().toString().trim();
                         final String email = mEmail.getText().toString().trim();
                         String password = mPassword.getText().toString().trim();
+                        String cpassword = cPassword.getText().toString().trim();
                         final String phone = phonenumber.getText().toString().trim();
-                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(SignUpActivity.this, "Sign Up Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            } else {
 
-                                User user = new User(name, email, phone);
+                        if(password.equals(cpassword)) {
+                            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener
+                                    (SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (!task.isSuccessful()) {
+                                                Toast.makeText(SignUpActivity.this,
+                                                        "Sign Up Error: " + task.getException().getMessage(),
+                                                        Toast.LENGTH_SHORT).show();
+                                            } else {
 
-                                FirebaseDatabase.getInstance().getReference("Users").child(mAuth.getCurrentUser().getUid()).setValue(user)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if(task.isSuccessful()){
-                                                    Toast.makeText(SignUpActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                                                }
+                                                User user = new User(name, email, phone);
+
+                                                FirebaseDatabase.getInstance().getReference("Users").
+                                                        child(mAuth.getCurrentUser().getUid()).setValue(user)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Toast.makeText(SignUpActivity.this,
+                                                                            "Registration Successful!",
+                                                                            Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
+
+
                                             }
-                                        });
 
-
-
-                            }
-
+                                        }
+                                    });
                         }
-                    });
+                        else{
+                            Toast.makeText(SignUpActivity.this, "Please check your password!", Toast.LENGTH_LONG).show();
+                        }
             }
         });
     }
@@ -100,5 +112,14 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         mAuth.removeAuthStateListener(firebaseAuthListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+        return;
     }
 }

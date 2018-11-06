@@ -12,7 +12,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/dealsmatch"
+        android:layout_gravity="left"/>
 
     <TextView
         android:id="@+id/currentuser"
